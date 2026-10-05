@@ -1,0 +1,66 @@
+:root {
+  --night: #0d1324; --panel: #172036; --line: #2b3a5c;
+  --bone: #ecebe4; --dim: #9aa6bd;
+  --ember: #ff8a3d; --mint: #7ee0b5; --danger: #ff4d5e;
+  --math: "Cambria Math", "STIX Two Math", "Latin Modern Math", Georgia, serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--night); color: var(--bone); font: 16px/1.4 system-ui, "Segoe UI", sans-serif; }
+.app { max-width: 860px; margin: 0 auto; padding: 12px; display: grid; gap: 12px; }
+
+/* Barre du haut */
+.bar { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.level { margin: 0 0 6px; font-weight: 600; }
+.meters { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--dim); font-size: .9rem; }
+.meter { display: flex; align-items: center; gap: 8px; }
+.meter strong { color: var(--ember); }
+.pips i { display: inline-block; width: 9px; height: 9px; margin-right: 3px; border: 2px solid var(--line); border-radius: 50%; }
+.pips i.on { background: var(--mint); border-color: var(--mint); }
+.pips.err i.on { background: var(--danger); border-color: var(--danger); }
+
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible { outline: 3px solid var(--ember); outline-offset: 2px; }
+.ghost { background: none; border: 1px solid var(--line); border-radius: 6px; padding: 6px 12px; color: var(--dim); }
+.primary { background: var(--ember); color: #1a0f08; border: 0; border-radius: 6px; padding: 12px 22px; font-weight: 700; }
+
+/* Scène */
+.stage { position: relative; }
+#scene { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; border-radius: 10px; }
+.overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 20px; text-align: center; background: rgba(13, 19, 36, .9); border-radius: 10px; }
+.overlay[hidden] { display: none; }
+.overlay h1 { margin: 0; font-size: clamp(1.4rem, 5vw, 2.1rem); }
+.overlay p { margin: 0; max-width: 36em; color: var(--dim); }
+
+/* Question et réponses */
+.quiz { display: grid; gap: 10px; }
+.prompt { margin: 0; padding: 16px; min-height: 4.2rem; display: flex; align-items: center; justify-content: center; background: var(--panel); border-radius: 10px; font: clamp(1.3rem, 5vw, 2rem) / 1.3 var(--math); text-align: center; }
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.options button { display: flex; align-items: center; gap: 10px; min-height: 64px; padding: 10px 12px; background: var(--panel); border: 2px solid var(--line); border-radius: 10px; font: clamp(1rem, 3.8vw, 1.35rem) var(--math); text-align: left; overflow-wrap: anywhere; }
+.options button:hover:not(:disabled) { border-color: var(--ember); }
+.options button:disabled { cursor: default; color: var(--bone); }
+.options .key { flex: none; width: 1.6em; height: 1.6em; display: grid; place-items: center; border-radius: 4px; background: var(--night); color: var(--dim); font: .8rem system-ui, sans-serif; }
+.options button.right { background: var(--mint); border-color: var(--mint); color: #06281a; }
+.options button.wrong { background: var(--danger); border-color: var(--danger); color: #2a0409; }
+
+@media (prefers-reduced-motion: no-preference) { .prompt.shake { animation: shake .3s; } }
+@keyframes shake { 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+@media (max-width: 520px) { .options { grid-template-columns: 1fr; } }
+
+/* Écriture mathématique (MathML) : vraies fractions, racines, exposants et indices */
+math { font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", math; font-size: 1.15em; math-style: normal; }
+.options math { font-size: 1.05em; }
+
+/* Barre de vie : verte quand elle est pleine, rouge quand elle est presque vide */
+.life { display: inline-block; width: 120px; height: 12px; border: 2px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--night); }
+.life i { display: block; height: 100%; width: calc(var(--hp, 1) * 100%); background: hsl(calc(var(--hp, 1) * 125) 80% 55%); transition: width .4s, background .4s; }
+.life-meter strong { color: var(--bone); font-variant-numeric: tabular-nums; }
+
+/* Finitions */
+#scene { box-shadow: 0 10px 40px rgba(0, 0, 0, .5), 0 0 0 1px var(--line); }
+.prompt, .options button { background: linear-gradient(180deg, #1d2848, var(--panel)); }
+.prompt { border: 1px solid var(--line); box-shadow: 0 6px 22px rgba(0, 0, 0, .35); }
+.options button { transition: transform .08s, border-color .15s; }
+.options button:active:not(:disabled) { transform: scale(.98); }
+.options button.right { box-shadow: 0 0 22px rgba(126, 224, 181, .5); }
+.options button.wrong { box-shadow: 0 0 22px rgba(255, 77, 94, .45); }
+.primary { box-shadow: 0 0 24px rgba(255, 138, 61, .4); }
